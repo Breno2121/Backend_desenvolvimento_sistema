@@ -1,15 +1,9 @@
 import fastify from "fastify";
+import { taskController } from "./controller/TaskController";
 
 const app = fastify();
 
-app.get("/hello", () => {
-    console.log("Entrou no end pont Hello!");
-    return "Ola mundo@" 
-})
-app.post("/hello", () => {
-    console.log("Entrou no methodo post Hello!");
-    return "Post methodo Ola mundo@" 
-})
+app.register(taskController);
 
 //.then espera finalizar
 app.listen({ port: 3333 }).then(() => {
