@@ -6,13 +6,13 @@ export class Task {
     private completed: boolean;
     private createAt: Date;
     private updateAt: Date;
-    
+
     constructor(text: string) {
-        this.id = randomUUID();       
-        this.text = text;      
-        this.completed = false;      
-        this.createAt = new Date();      
-        this.updateAt = new Date(); 
+        this.id = randomUUID();
+        this.text = text;
+        this.completed = false;
+        this.createAt = new Date();
+        this.updateAt = new Date();
     }
 
     public getId() {
@@ -30,14 +30,12 @@ export class Task {
     public getUpdateAd() {
         return this.updateAt;
     }
-    public setCompleted(completed: boolean) {
-        this.completed = completed;
+    public setCompleted() {
+        this.completed = !this.completed;
         this.updateAt = new Date();
     }
     public setText(text: string) {
-        //
+        this.text = text;
         this.updateAt = new Date();
     }
-
-
 }
