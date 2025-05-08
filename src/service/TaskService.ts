@@ -1,25 +1,21 @@
 import { Task } from "../entity/Task";
-import { TaskRepository } from "../repository/TaskRepository";
 
 class TaskService {
 
-    private taskList: Task[] = []
-    private taskRepository = new TaskRepository()
+    private taskList: Task[] = [];
 
     public create(text: string): void {
-        // const textAlreadyExist = this.taskList.find(task => task.getText() === text);
-        // if (textAlreadyExist) {
-        //     throw new Error("JA EXISTE UMA TAREFA COM ESTE TEXTO.")
-        // }
+        const textAlreadyExist = this.taskList.find(task => task.getText() === text);
+        if (textAlreadyExist) {
+            throw new Error("Já existe uma tarefa com esse texto.")
+        }
 
         const newTask = new Task(text);
-        // this.taskRepository.save(newTask);
+        this.taskList.push(newTask);
     }
 
-    public getAll() {
-        const task = await this.taskRepository.findAll();
-        console.log(task)
-        return task;
+    public getAll(): Task[] {
+        return this.taskList;
     }
 
     public getById(id: string): Task | null {
@@ -27,31 +23,28 @@ class TaskService {
         return task ? task : null;
     }
 
-    public updateCompleted(id: string) {
+    public updateCompleted(id: string){
         const task = this.getById(id);
-        if (task === null) {
-            throw new Error("Tarefa nao encontrada..")
+        if(task === null){
+            throw new Error("Tarefa não foi encontrada.")
         }
 
-        task.setCompleted();
+        task.setCompleted(); 
         return task;
     }
 
-    public updateText(id: string, text: string) {
+    public updateText(id: string, text: string){
         const task = this.getById(id);
-        if (task === null) {
-            throw new Error("Tarefa nao econtrada..")
+        if(task === null){
+            throw new Error("Tarefa não foi encontrada.")
         }
+
         task.setText(text);
         return task;
     }
-    public delete(id: string) {
-        const task = this.getById(id);
-        if (task === null) {
-            throw new Error("Tarafa nao foi encontrada.")
-        }
-        const taskFilter = this.taskList.filter(task => task.getId() !== id)
-        this.taskList = taskFilter
+
+    public deleteTask(id: string) {
+        this.taskList = this.taskList.filter(task => task.getId() !== id);
     }
 
 }

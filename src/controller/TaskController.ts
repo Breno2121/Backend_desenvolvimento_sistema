@@ -3,7 +3,6 @@ import { taskService } from "../service/TaskService";
 
 export async function taskController(app: FastifyInstance) {
     app.post("/task", (request, reply) => {
-        //PEGAR IMFORMACAO DO FRONT OU QUEM CHAMAR O ENDPOINT (TEXT)
         const body = request.body as { text: string };
 
         try {
@@ -14,45 +13,46 @@ export async function taskController(app: FastifyInstance) {
         }
     })
 
-    app.get("/tasks", (_, reply) => {
-        const list = taskService.getAll()
+    app.get("/task", (_, reply) => {
+        const list = taskService.getAll();
         return reply.code(200).send(list);
     })
 
-    app.get("/tasks:id", (request: FastifyRequest, reply: FastifyReply) => {
-        const { id } = request.params as { id: string };
-        const task = taskService.getById(id);
-        return reply.code(200).send(task);
+    app.get("/task/:id", (request: FastifyRequest, reply: FastifyReply) => {
+       const { id } = request.params as { id: string };
+       const task = taskService.getById(id);
+       return task;
     })
-    app.patch("/tasks/:id/completed", (request, reply) => {
-        //Captura informacao
-        const { id } = request.params as { id: string };
 
+    app.patch("/task/:id/completed", (request, reply) => {
+        // CAPTURA INFORMAÇÃO
+        const { id } = request.params as { id: string };
+        
         try {
-            //repassa info recebida e receb informacao processado
+            // RAPASSA INFO RECEBIDA E RECEBE INFORMAÇÃO PROCESSADA
             const task = taskService.updateCompleted(id);
-            //Retorna uma response para quem chamou a rota
-            return reply.code(200).send(task)
-        } catch (error: any) {
-            return reply.code(404).send({ error: error.message })
+            // RETORNA UMA RESPONSE PARA QUEM CHAMOU A ROTA
+            return reply.code(200).send(task);
+        }catch(error: any) {
+            return reply.code(404).send({ error: error.message})
         }
     });
 
-    app.patch("/tasks/:id/text", (request, reply) => {
+    app.patch("/task/:id/text", (request, reply) => {
         const { id } = request.params as { id: string };
         const { text } = request.body as { text: string };
 
         try {
             const task = taskService.updateText(id, text);
             return reply.code(200).send(task);
-        } catch (error: any) {
-            return reply.code(404).send({ error: error.message })
+        }catch(error: any) {
+            return reply.code(404).send({ error: error.message });
         }
     })
 
-    app.delete("/tasks/:id", (request: FastifyRequest, reply: FastifyReply) => {
-        const { id } = request.params as { id: string }
-        taskService.delete(id)
+    app.delete("/task/:id", (request, reply) => {
+        const { id } = request.params as { id: string };
+        taskService.deleteTask(id);
         return reply.code(200).send();
     })
 
