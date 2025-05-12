@@ -13,8 +13,8 @@ export async function taskController(app: FastifyInstance) {
         }
     })
 
-    app.get("/task", (_, reply) => {
-        const list = taskService.getAll();
+    app.get("/task", async (_, reply) => {
+        const list = await taskService.getAll();
         return reply.code(200).send(list);
     })
 
@@ -24,13 +24,13 @@ export async function taskController(app: FastifyInstance) {
        return task;
     })
 
-    app.patch("/task/:id/completed", (request, reply) => {
+    app.patch("/task/:id/completed", async (request, reply) => {
         // CAPTURA INFORMAÇÃO
         const { id } = request.params as { id: string };
         
         try {
             // RAPASSA INFO RECEBIDA E RECEBE INFORMAÇÃO PROCESSADA
-            const task = taskService.updateCompleted(id);
+            const task = await taskService.updateCompleted(id);
             // RETORNA UMA RESPONSE PARA QUEM CHAMOU A ROTA
             return reply.code(200).send(task);
         }catch(error: any) {
@@ -50,9 +50,9 @@ export async function taskController(app: FastifyInstance) {
         }
     })
 
-    app.delete("/task/:id", (request, reply) => {
+    app.delete("/task/:id", async (request, reply) => {
         const { id } = request.params as { id: string };
-        taskService.deleteTask(id);
+        await taskService.deleteTask(id);
         return reply.code(200).send();
     })
 
